@@ -1,0 +1,1 @@
+select d.id as id_disciplina, d.codigo, d.nome as nome_disciplina, d.cargahoraria, d.semestre, p.id as id_professor, p.nome as nome_professor, p.email from disciplina d, disciplina_professor dp, professor p WHERE d.id = dp.id_disciplina AND p.id = dp.id_professor AND p.id = 12 ORDER by d.semestre DESC, d.nome
