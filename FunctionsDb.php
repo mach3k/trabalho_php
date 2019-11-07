@@ -36,43 +36,46 @@ function Semestre($id){
 function CargaHoraria($id){
 	$db= new Database();
 	$conexao = $db->getConexao();
+	
 	$sql = "select sum(cargahoraria) as carga from disciplina where semestre= :id";
 	$stmt = $conexao->prepare($sql);
 	$stmt->bindParam(':id',$id);
 	$stmt->execute();
 	$semestre= $stmt->fetch(PDO::FETCH_ASSOC);
+	
 	return $semestre;
 }
 
 
 //Exercício 3
 function DadosDic($id){
-$db= new Database();
-$conexao = $db->getConexao();
-$sql = "select * from disciplina where codigo= :id";
-$stmt = $conexao->prepare($sql);
-$stmt->bindParam(':id',$id);
-$stmt->execute();
-$disc= $stmt->fetchAll(PDO::FETCH_ASSOC);
-return $disc;
+	$db= new Database();
+	$conexao = $db->getConexao();
+	
+	$sql = "select * from disciplina where id= :id";
+	$stmt = $conexao->prepare($sql);
+	$stmt->bindParam(':id',$id);
+	$stmt->execute();
+	$disc= $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+	return $disc;
 }
 
 //Exercício 4
 function MateProf($id){
-$db= new Database();
-$conexao = $db->getConexao();
-$sql = "select id from professor where nome= :id";
-$stmt = $conexao->prepare($sql);
-$stmt->bindParam(':id',$id);
-$stmt->execute();
-$lista= $stmt->fetchAll(PDO::FETCH_ASSOC);
-$sla=$lista[0]['id'];
-$sql = "select id_disciplina from disciplina_professor where id_professor=:id";
-$stmt = $conexao->prepare($sql);
-$stmt->bindParam(':id',$sla);
-$stmt->execute();
-$lista= $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+	$db= new Database();
+	$conexao = $db->getConexao();
+	$sql = "select id from professor where nome= :id";
+	$stmt = $conexao->prepare($sql);
+	$stmt->bindParam(':id',$id);
+	$stmt->execute();
+	$lista= $stmt->fetchAll(PDO::FETCH_ASSOC);
+	$sla=$lista[0]['id'];
+	$sql = "select id_disciplina from disciplina_professor where id_professor=:id";
+	$stmt = $conexao->prepare($sql);
+	$stmt->bindParam(':id',$sla);
+	$stmt->execute();
+	$lista= $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 /*
 echo '<pre>';
