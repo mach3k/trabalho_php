@@ -4,14 +4,14 @@ require_once "Database.php";
 function getMatriz($semestre){
 	$db= new Database();
 	$conexao = $db->getConexao();
-	$sql = "	select d.id as id_disciplina, d.codigo, d.nome as nome_disciplina, d.cargahoraria, d.semestre, p.id as id_professor, p.nome as nome_professor, p.email, p.foto
-from disciplina d, disciplina_professor dp, professor p
-WHERE
-d.id = dp.id_disciplina AND
-p.id = dp.id_professor 
-and d.semestre =:semestre
-ORDER by d.semestre, d.nome
-			";
+	$sql = "SELECT d.id as id_disciplina, d.codigo, d.nome as nome_disciplina, d.cargahoraria, " .
+		"d.semestre, p.id as id_professor, p.nome as nome_professor, p.email, p.foto " .
+		"FROM disciplina d, disciplina_professor dp, professor p " .
+		"WHERE d.id = dp.id_disciplina " .
+		"AND p.id = dp.id_professor " .
+		"AND d.semestre =:semestre " .
+		"ORDER by d.semestre, d.nome";
+
 	$stmt = $conexao->prepare($sql);
 	$stmt->bindParam(':semestre',$semestre);
 
@@ -31,7 +31,6 @@ function Semestre($id){
 	return $semestre;
 }
 
-
 //Exercício 2
 function CargaHoraria($id){
 	$db= new Database();
@@ -46,38 +45,38 @@ function CargaHoraria($id){
 	return $semestre;
 }
 
-
 //Exercício 3
 function DadosDic($id){
 	$db= new Database();
 	$conexao = $db->getConexao();
 	
-	$sql = "select * from disciplina where id= :id";
+	$sql = "SELECT d.id, d.codigo, d.nome, d.cargahoraria, d.semestre, " .
+	"p.id AS id_professor, p.nome AS nome_professor, " .
+	"c.nome AS nome_curso " .
+	"FROM disciplina d " .
+	"LEFT JOIN disciplina_professor AS dp ON (d.id = dp.id_disciplina) " .
+	"LEFT JOIN professor AS p ON (dp.id_professor = p.id) " .
+	"LEFT JOIN curso AS c ON (d.curso_id = c.id)" .
+	"WHERE d.id= :id";
 	$stmt = $conexao->prepare($sql);
 	$stmt->bindParam(':id',$id);
 	$stmt->execute();
-	$disc= $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-	return $disc;
+	
+	return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 //Exercício 4
-function MateProf($id){
+function MateProf($nome){
 	$db= new Database();
 	$conexao = $db->getConexao();
-	$sql = "select id from professor where nome= :id";
+	
+	$sql = "SELECT d.id, d.codigo, d.curso_id, d.nome, d.cargahoraria, d.semestre " . 
+	"FROM disciplina AS d " .
+	"LEFT JOIN disciplina_professor AS dp ON (d.id = dp.id_disciplina) " .
+	"LEFT JOIN professor AS p ON (dp.id_professor = p.id) " .
+	"WHERE p.nome = :nome";
 	$stmt = $conexao->prepare($sql);
-	$stmt->bindParam(':id',$id);
+	$stmt->bindParam(':nome',$nome);
 	$stmt->execute();
-	$lista= $stmt->fetchAll(PDO::FETCH_ASSOC);
-	$sla=$lista[0]['id'];
-	$sql = "select id_disciplina from disciplina_professor where id_professor=:id";
-	$stmt = $conexao->prepare($sql);
-	$stmt->bindParam(':id',$sla);
-	$stmt->execute();
-	$lista= $stmt->fetchAll(PDO::FETCH_ASSOC);
+	return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-/*
-echo '<pre>';
-print_r(getMatriz(2));
-*/

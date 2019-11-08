@@ -1,5 +1,5 @@
 <?php
-require_once("helpers.php");
+require_once("helpers/util.php");
 
 ?>
 
@@ -17,7 +17,7 @@ require_once("helpers.php");
   </head>
   <body>
     <nav class="navbar navbar-light bg-light justify-content-between">
-      <a href="<?php echo $base_url?>" class="navbar-brand">Lucas Borges</a>
+      <a href="<?php echo $base_url?>" class="navbar-brand">Programação Web</a>
       <form method="post" action="pesquisa.php" class="form-inline">
         <input class="form-control mr-sm-2" type="text" name="busca" placeholder="Digite aqui...." aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Pesquisa</button>
